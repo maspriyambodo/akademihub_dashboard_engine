@@ -243,12 +243,12 @@ func (r *DashboardRepo) GetAdminSummaryCards(ctx context.Context, f model.Dashbo
 	// PPDB
 	g.Go(func() error {
 		var err error
-		totalPendaftar, err = countQuery(gctx, r.db, `SELECT COUNT(*) FROM ppdb_pendaftaran WHERE deleted_at IS NULL`)
+		totalPendaftar, err = countQuery(gctx, r.db, `SELECT COUNT(*) FROM ppdb_pendaftar WHERE deleted_at IS NULL`)
 		return err
 	})
 	g.Go(func() error {
 		var err error
-		pendaftarDiterima, err = countQuery(gctx, r.db, `SELECT COUNT(*) FROM ppdb_pendaftaran WHERE status_pendaftaran = 'diterima' AND deleted_at IS NULL`)
+		pendaftarDiterima, err = countQuery(gctx, r.db, `SELECT COUNT(*) FROM ppdb_pendaftar WHERE status_pendaftaran = 'diterima' AND deleted_at IS NULL`)
 		return err
 	})
 
@@ -807,7 +807,7 @@ func (r *DashboardRepo) GetPpdbInsights(ctx context.Context) (*model.PpdbInsight
 	var statusRows []statusRow
 	if err := r.db.SelectContext(ctx, &statusRows, `
 		SELECT status_pendaftaran, COUNT(*) AS total
-		FROM ppdb_pendaftaran
+		FROM ppdb_pendaftar
 		WHERE deleted_at IS NULL
 		GROUP BY status_pendaftaran`,
 	); err != nil {
@@ -832,7 +832,7 @@ func (r *DashboardRepo) GetPpdbInsights(ctx context.Context) (*model.PpdbInsight
 	var monthlyRows []monthlyRow
 	if err := r.db.SelectContext(ctx, &monthlyRows, `
 		SELECT EXTRACT(MONTH FROM created_at)::int AS month, COUNT(*) AS total
-		FROM ppdb_pendaftaran
+		FROM ppdb_pendaftar
 		WHERE EXTRACT(YEAR FROM created_at) = $1
 		  AND deleted_at IS NULL
 		GROUP BY month ORDER BY month`,

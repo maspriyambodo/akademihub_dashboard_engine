@@ -104,7 +104,6 @@ func loadUserClaims(ctx context.Context, db *sqlx.DB, userID int64) (*model.User
 		INNER JOIN sys_user_roles ur ON ur.sys_role_id = r.id
 		WHERE ur.sys_user_id = $1
 		  AND ur.deleted_at IS NULL
-		  AND r.deleted_at IS NULL
 	`, userID)
 	if err != nil {
 		return nil, err
